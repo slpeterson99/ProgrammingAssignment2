@@ -6,7 +6,7 @@ makeCacheMatrix <- function(x = matrix()) {
     set <- function(y) {
         x <<- y             ## y named differently from x for readability; 
                             ## <<- forces search in parent environment
-        i <<- NULL
+        i <<- NULL          ## Sets the inverse as NULL in the parent environment
     }
     get <- function() x                        ## "getter" to return x from parent environment, makeCacheMatrix, since x is not defined in get
     setinverse <- function(solve) i <<- solve  ## setinverse assigns the input argument to i in the parent environment
@@ -27,12 +27,12 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
     i <- x$getinverse()
-    if(!is.null(i)) {
-        message("getting cached data")
+    if(!is.null(i)) {                  ## If there is an inverse in cache, it is returned 
+        message("getting cached data") ## with a message to indicate that the cache was used
         return(i)
     }
-    data <- x$get()
-    i <- solve(data, ...)
-    x$setinverse(i)
-    i
+    data <- x$get()         ## Since there was no inverse in cache, 
+    i <- solve(data, ...)   ## it is computed,
+    x$setinverse(i)         ## set in cache,
+    i                       ## and returned.
 }
